@@ -1,7 +1,8 @@
 require('normalize.css/normalize.css');
 require('styles/App.css');
-let imageDatas = require('../sources/data.json');
+
 import React from 'react';
+// let imageDatas = require('../sources/data.json');
 // let yeomanImage = require('../images/yeoman.png');
 
 // class AppComponent extends React.Component {
@@ -42,15 +43,15 @@ let ImgFigure = React.createClass({
   render:function(){
     return (
       <figure>
-        <img src={this.props.data.fileName}/>
         <figcation>
-          <h2>{this.props.data.title}</h2>
+          <h2>123</h2>
         </figcation>
       </figure>
     )
-  }
+  };
 })
-var AppComponent = React.createClass({
+
+let AppComponent = React.createClass({
   getDefaultProps: function(){
     return {
       name : 'navtion'
@@ -65,6 +66,7 @@ var AppComponent = React.createClass({
     this.refs.myTextInput.focus();
   },
   handleChange:function(){
+    //this.refs.result.val(this.refs.myTextInput.val());
     this.setState({
       'value' : this.refs.myTextInput.value
     });
@@ -72,21 +74,10 @@ var AppComponent = React.createClass({
   render: function() {
     let controllerUnits =[],
         imgFigures = [];
-    imageDatas.forEach(function(value){
-      imgFigures.push(<ImgFigure data={value} />);
-    });
     return (
-      <div>
-        <section className="img-sec">
-          {imgFigures}
-        </section>
-        <nav className="controller-nav">
-          {controllerUnits}
-        </nav>
-        <input type="text" ref="myTextInput"  onChange={this.handleChange} />
-        <input type="button" value="Focus the text input" onClick={this.handleClick}/>
-        <span ref="result" className="result">{this.state.value}</span>
-      </div>
+      <section>
+        fff
+      </section>
     );
   }
 });
