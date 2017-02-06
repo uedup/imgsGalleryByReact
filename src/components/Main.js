@@ -17,12 +17,81 @@ let getRangeRandom = function(low,high){
 let degreeRandom= function(deg){
   return (Math.random()>0.5?'-':'')+Math.ceil(Math.random()*deg);
 }
-
-let ImgFigure = React.createClass({
-  initSrc : function(src){
-    return require('../images/'+src);
+let IntervalMixin = function(interval) {
+  return {
+    componentDidMount:function(){
+      this._interval = setInterval(this.onTick,interval);
+    },
+    componentWillUnmount:function(){
+      clearInterval(this._interval);
+    }
+  }
+}
+let Timer = React.createClass({
+  mixins:[IntervalMixin(1000)],
+  getInitialState:function() {
+    return {secondsElapsed : 0}
   },
-  handleClick : function(){
+  onTick:function(){
+    this.setState({
+      secondsElapsed:this.state.secondsElapsed+1
+    })
+  },
+  render:function(){
+    return (<div>
+        Seconds Elapsed: {this.state.secondsElapsed}
+      </div>)
+  }
+});
+// let ImgFigure = React.createClass({
+//   initSrc : function(src){
+//     return require('../images/'+src);
+//   },
+//   handleClick : function(){
+//     let arrange = this.props.arrange;
+//     let index = this.props.index;
+//     if(arrange.isCenter){
+//       this.props.inverse(index);
+//     }else{
+//       this.props.rearrange(index);
+//     }
+//   },
+//   render:function(){
+//     let styleObj = {};
+//     if(this.props.arrange.pos){
+//       styleObj = this.props.arrange.pos;
+//     }
+//     if(this.props.arrange.rotate){
+//       ['MozTransform', 'msTransform', 'WebkitTransform', 'transform'].forEach(function(value){
+//         styleObj[value] = 'rotate('+this.props.arrange.rotate+'deg)';
+//       }.bind(this));
+//     }
+//     let imgFigureClassName = 'figure';
+//         imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+//     return (
+//       <figure className={imgFigureClassName} style={styleObj}>
+//         <img onClick={this.handleClick} src={this.props.data.imgURL} alt={this.props.data.title}/>
+//         <figcaption className="figcaption">
+//           <h2 className="img-title">{this.props.data.title}</h2>
+//           <div className="img-back" onClick={this.handleClick}>
+//             <p>
+//               {this.props.data.desc}
+//             </p>
+//           </div>
+//         </figcaption>
+//       </figure>
+//     )
+//   }
+// })
+class ImgFigure extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  initSrc(src){
+    return require('../images/'+src);
+  }
+  handleClick(){
     let arrange = this.props.arrange;
     let index = this.props.index;
     if(arrange.isCenter){
@@ -30,8 +99,8 @@ let ImgFigure = React.createClass({
     }else{
       this.props.rearrange(index);
     }
-  },
-  render:function(){
+  }
+  render(){
     let styleObj = {};
     if(this.props.arrange.pos){
       styleObj = this.props.arrange.pos;
@@ -57,8 +126,7 @@ let ImgFigure = React.createClass({
       </figure>
     )
   }
-})
-
+}
 let AppComponent = React.createClass({
   getDefaultProps: function(){
     return {
@@ -239,6 +307,7 @@ let AppComponent = React.createClass({
         <nav className="controller-nav">
           {controllerUnits}
         </nav>
+        <Timer />
       </div>
     );
   }
@@ -247,18 +316,16 @@ let AppComponent = React.createClass({
 export default AppComponent;
 
 // class AppComponent extends React.Component {
-//   // getDefaultProps(){
-//   //   return {
-//   //     age : new Date()
-//   //   };
-//   // }
-//   // getInitialState(){
-//   //   return {
-//   //     'notice' :  'this is react!'
-//   //   };
-//   // }
-//   handleClick() {
-//     this.refs.myTextInput.focus();
+//   static propTypes = {
+
+//   };
+//   static defaultProps = {
+
+//   };
+//   constructor(props) {
+//     this.status = {
+
+//     }
 //   }
 //   render() {
 //     return (
@@ -271,12 +338,7 @@ export default AppComponent;
 //       </div>
 //     );
 //   }
+//   componentDidMount(){
 
-//   clickHandle() {
-
-//     console.log(this.props.age)
 //   }
 // }
-// AppComponent.defaultProps = {
-//   age : 17
-// };
